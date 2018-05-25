@@ -256,6 +256,7 @@ workflows:
 #              only:
 #                - develop
       - deploy_beta:
+          context: template-app
           requires:
             - test_api_v16
   #          - test_api_v25
@@ -264,6 +265,7 @@ workflows:
               only:
                 - develop
       - documentation:
+          context: template-app
           requires:
             - test_api_v16
  #           - test_api_v25
@@ -272,6 +274,7 @@ workflows:
               only:
                 - develop
       - screenshot_api_16:
+          context: template-app
           requires:
             - test_api_v16
 #            - test_api_v25
@@ -280,6 +283,7 @@ workflows:
               only:
                 - develop
       - deploy_production:
+          context: template-app
           filters:
             branches:
               only:
