@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+static def releaseTime() {
+    return new Date().format("yyyy-MM-dd_HHmmss", TimeZone.getTimeZone("UTC"))
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -15,6 +19,25 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def fileName = outputFile.name.replace("app",
+                        "${defaultConfig.applicationId}_${releaseTime()}")
+                outputFileName = fileName
+
+            }
+        }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -25,4 +48,39 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+import java.util.regex.Pattern
+
+task updateVersionCode {
+    doLast {
+        def manifestFile = file("src/main/AndroidManifest.xml")
+        def pattern = Pattern.compile("versionCode=\"(\\d+)\"")
+        def manifestText = manifestFile.getText()
+        def matcher = pattern.matcher(manifestText)
+        matcher.find()
+        def versionCode = Integer.parseInt(matcher.group(1))
+        def manifestContent = matcher.replaceAll("versionCode=\"" + ++versionCode + "\"")
+        println "Version Code: " + versionCode
+        manifestFile.write(manifestContent)
+    }
+}
+
+task updateVersionName {
+    doLast {
+        if (project.hasProperty("vName")) {
+            def manifestFile = file("src/main/AndroidManifest.xml")
+            def patternVersionNumber = Pattern.compile("versionName=\"(\\d+)\\.(\\d+)\\.(\\d+)(?:\\S*)\"")
+            def manifestText = manifestFile.getText()
+            def matcherVersionNumber = patternVersionNumber.matcher(manifestText)
+            matcherVersionNumber.find()
+
+            def manifestContent = matcherVersionNumber.replaceAll("versionName=\"" + vName + "\"")
+            manifestFile.write(manifestContent)
+
+            println "Version name: " + vName
+        } else {
+            println "please run: updateVersionName -P vName="
+        }
+    }
 }
