@@ -1,5 +1,5 @@
 # Android Template App
-
+ 
 ![Teclib' Banner](https://user-images.githubusercontent.com/29282308/31669540-abed67a8-b355-11e7-98e2-0ad190f37088.png)
 
 [![License GPL 3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](./LICENSE.md)
