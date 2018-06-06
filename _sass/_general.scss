@@ -19,6 +19,10 @@ hr {
 
 img {
   max-width: 100%;
+
+  &.android-robot {
+    margin-top: 30px;
+  }
 }
 
 .jumbotron {
