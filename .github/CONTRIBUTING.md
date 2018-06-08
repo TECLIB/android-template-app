@@ -246,6 +246,12 @@ After working on your changes you need to Push it (upload) your **newly created 
     git push origin feature/created-branch
 ```
 
+Then you'll need to  the following to track your remote branch.
+
+```console
+    git branch --track origin/feature/created-branch
+```
+
 ### <a name="4.2.5"></a> 4.2.5 Create a Pull Request
 
 Pull requests or PR are **proposed changes** to a repository submitted by a user and accepted or rejected by a repository's collaborators.
